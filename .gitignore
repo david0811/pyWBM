@@ -1,5 +1,6 @@
 # Large data files
 *.nc
+*.npz
 
 # macOS specific files
 .DS_Store
