@@ -43,6 +43,112 @@ def calculate_potential_evapotranspiration(tas, doy, phi):
     return PET
 
 
+###########################
+# Kc timeseries function
+###########################
+@jax.jit
+def construct_Kpet_crop(
+    GS_start: float,
+    GS_end: float,
+    L_ini: float,
+    L_dev: float,
+    L_mid: float,
+    L_late: float,
+    Kc_ini: float,
+    Kc_mid: float,
+    Kc_end: float,
+    Kmin: float,
+    Kmax: float,
+    c_lai: float,
+    lai: jnp.ndarray,
+) -> jnp.ndarray:
+    """
+    Calculate the crop coefficient timeseries for daily potential evapotranspiration (Kpet)
+    based on the growth stage of the crop.
+
+    Args:
+    - GS_start (float): Start day of the crop growth stage.
+    - GS_end (float): End day of the crop growth stage.
+    - L_ini (float): Relative length of the initial stage.
+    - L_dev (float): Relative length of the development stage.
+    - L_mid (float): Relative length of the mid stage.
+    - L_late (float): Relative length of the late stage.
+    - Kc_ini (float): Crop coefficient for the initial stage.
+    - Kc_mid (float): Crop coefficient for the mid stage.
+    - Kc_end (float): Crop coefficient for the end stage.
+    - Kmin (float): Minimum crop coefficient.
+    - Kmax (float): Maximum crop coefficient.
+    - c_lai (float): Coefficient for LAI (Leaf Area Index) calculation.
+    - lai (jnp.ndarray): Timeseries of Leaf Area Index (365 days).
+
+    Returns:
+    - Kpet_out (jnp.ndarray): Array of daily potential evapotranspiration values for each day of the year.
+
+    Note:
+    - The function assumes a 365-day year.
+    """
+    # Out
+    Kpet_out = jnp.zeros(365)
+
+    # Day of year
+    doy = jnp.arange(365) + 1.0
+
+    # Get days from relative length
+    GS_length = GS_end - GS_start
+    doy_ini = L_ini * GS_length
+    doy_dev = L_dev * GS_length
+    doy_mid = L_mid * GS_length
+    doy_late = L_late * GS_length
+
+    # Loop through year
+    pre_GS = doy < GS_start
+    Kpet_out += pre_GS * (Kmin + (Kmax - Kmin) * (1 - jnp.exp(-0.7 * lai)))
+
+    ini_period = (doy < (GS_start + doy_ini)) & (doy >= GS_start)
+    Kpet_out += ini_period * Kc_ini
+
+    dev_period = (doy < (GS_start + doy_ini + doy_dev)) & (doy >= (GS_start + doy_ini))
+    Kpet_out += dev_period * (
+        Kc_ini + (Kc_mid - Kc_ini) * ((doy - (GS_start + doy_ini)) / doy_dev)
+    )
+
+    mid_period = (doy < (GS_start + doy_ini + doy_dev + doy_mid)) & (
+        doy >= (GS_start + doy_ini + doy_dev)
+    )
+    Kpet_out += mid_period * Kc_mid
+
+    down_period = (doy < (GS_start + doy_ini + doy_dev + doy_mid + doy_late)) & (
+        doy >= (GS_start + doy_ini + doy_dev + doy_mid)
+    )
+
+    Kpet_out += down_period * (
+        Kc_mid - (Kc_mid - Kc_end) * (doy - (GS_start + doy_ini + doy_dev + doy_mid)) / doy_late
+    )
+
+    post_GS = doy >= (GS_start + doy_ini + doy_dev + doy_mid + doy_late)
+    Kpet_out += post_GS * (Kmin + (Kmax - Kmin) * (1 - jnp.exp(-c_lai * lai)))
+
+    return Kpet_out
+
+
+@jax.jit
+def construct_Kpet_gen(Kmin: float, Kmax: float, c_lai: float, lai: jnp.ndarray) -> jnp.ndarray:
+    """
+    Calculate the crop coefficient timeseries for potential evapotranspiration (Kpet)
+    based on LAI (Leaf Area Index) for general (i.e. non-crop) land.
+
+    Args:
+    - Kmin (float): Minimum scaling coefficient.
+    - Kmax (float): Maximum scaling coefficient.
+    - c_lai (float): Coefficient for LAI calculation.
+    - lai (jnp.ndarray): Timesereis of Leaf Area Index (365 days).
+
+    Returns:
+    - float: The calculated crop coefficient for potential evapotranspiration (Kpet).
+    """
+    return Kmin + (Kmax - Kmin) * (1 - jnp.exp(-c_lai * lai))
+
+
 ##############################
 # STATE UPDATE FUNCTION
 ###############################
@@ -190,13 +296,13 @@ def update_state(state: dict, forcing: dict, params: dict):
 # RUN WBM FUNCTION
 ###############################
 @jax.jit
-def pywbm_jax(
+def run_water_balance(
     forcing: dict,
     init: dict,
     params: dict,
 ) -> jnp.ndarray:
     """
-    Runs pyWBM using the JAX library.
+    Runs a single gridpoint simulation.
 
     Args:
     - forcing (dict): A dictionary containing the forcing data for the water balance calculation.
@@ -276,109 +382,3 @@ def pywbm_jax(
     outs, Ws_out = jax.lax.scan(update_fn, init, scan_forcing)
 
     return jnp.insert(Ws_out, 0, Ws_init)  # return with initial condition included
-
-
-###########################
-# Kc timeseries function
-###########################
-@jax.jit
-def construct_Kpet_crop(
-    GS_start: float,
-    GS_end: float,
-    L_ini: float,
-    L_dev: float,
-    L_mid: float,
-    L_late: float,
-    Kc_ini: float,
-    Kc_mid: float,
-    Kc_end: float,
-    Kmin: float,
-    Kmax: float,
-    c_lai: float,
-    lai: jnp.ndarray,
-) -> jnp.ndarray:
-    """
-    Calculate the crop coefficient timeseries for daily potential evapotranspiration (Kpet)
-    based on the growth stage of the crop.
-
-    Args:
-    - GS_start (float): Start day of the crop growth stage.
-    - GS_end (float): End day of the crop growth stage.
-    - L_ini (float): Relative length of the initial stage.
-    - L_dev (float): Relative length of the development stage.
-    - L_mid (float): Relative length of the mid stage.
-    - L_late (float): Relative length of the late stage.
-    - Kc_ini (float): Crop coefficient for the initial stage.
-    - Kc_mid (float): Crop coefficient for the mid stage.
-    - Kc_end (float): Crop coefficient for the end stage.
-    - Kmin (float): Minimum crop coefficient.
-    - Kmax (float): Maximum crop coefficient.
-    - c_lai (float): Coefficient for LAI (Leaf Area Index) calculation.
-    - lai (jnp.ndarray): Timeseries of Leaf Area Index (365 days).
-
-    Returns:
-    - Kpet_out (jnp.ndarray): Array of daily potential evapotranspiration values for each day of the year.
-
-    Note:
-    - The function assumes a 365-day year.
-    """
-    # Out
-    Kpet_out = jnp.zeros(365)
-
-    # Day of year
-    doy = jnp.arange(365) + 1.0
-
-    # Get days from relative length
-    GS_length = GS_end - GS_start
-    doy_ini = L_ini * GS_length
-    doy_dev = L_dev * GS_length
-    doy_mid = L_mid * GS_length
-    doy_late = L_late * GS_length
-
-    # Loop through year
-    pre_GS = doy < GS_start
-    Kpet_out += pre_GS * (Kmin + (Kmax - Kmin) * (1 - jnp.exp(-0.7 * lai)))
-
-    ini_period = (doy < (GS_start + doy_ini)) & (doy >= GS_start)
-    Kpet_out += ini_period * Kc_ini
-
-    dev_period = (doy < (GS_start + doy_ini + doy_dev)) & (doy >= (GS_start + doy_ini))
-    Kpet_out += dev_period * (
-        Kc_ini + (Kc_mid - Kc_ini) * ((doy - (GS_start + doy_ini)) / doy_dev)
-    )
-
-    mid_period = (doy < (GS_start + doy_ini + doy_dev + doy_mid)) & (
-        doy >= (GS_start + doy_ini + doy_dev)
-    )
-    Kpet_out += mid_period * Kc_mid
-
-    down_period = (doy < (GS_start + doy_ini + doy_dev + doy_mid + doy_late)) & (
-        doy >= (GS_start + doy_ini + doy_dev + doy_mid)
-    )
-
-    Kpet_out += down_period * (
-        Kc_mid - (Kc_mid - Kc_end) * (doy - (GS_start + doy_ini + doy_dev + doy_mid)) / doy_late
-    )
-
-    post_GS = doy >= (GS_start + doy_ini + doy_dev + doy_mid + doy_late)
-    Kpet_out += post_GS * (Kmin + (Kmax - Kmin) * (1 - jnp.exp(-c_lai * lai)))
-
-    return Kpet_out
-
-
-@jax.jit
-def construct_Kpet_gen(Kmin: float, Kmax: float, c_lai: float, lai: jnp.ndarray) -> jnp.ndarray:
-    """
-    Calculate the crop coefficient timeseries for potential evapotranspiration (Kpet)
-    based on LAI (Leaf Area Index) for general (i.e. non-crop) land.
-
-    Args:
-    - Kmin (float): Minimum scaling coefficient.
-    - Kmax (float): Maximum scaling coefficient.
-    - c_lai (float): Coefficient for LAI calculation.
-    - lai (jnp.ndarray): Timesereis of Leaf Area Index (365 days).
-
-    Returns:
-    - float: The calculated crop coefficient for potential evapotranspiration (Kpet).
-    """
-    return Kmin + (Kmax - Kmin) * (1 - jnp.exp(-c_lai * lai))
