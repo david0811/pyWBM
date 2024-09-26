@@ -9,6 +9,7 @@ dependencies = [
     "jax>=0.4.30",
     "jupyterlab>=4.2.5",
     "matplotlib>=3.9.2",
+    "nc-time-axis>=1.4.1",
     "numpy>=2.0.2",
     "optax>=0.2.3",
     "pandas>=2.2.2",
