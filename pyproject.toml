@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
     "jax>=0.4.30",
+    "jupyterlab>=4.2.5",
     "matplotlib>=3.9.2",
     "numpy>=2.0.2",
     "optax>=0.2.3",
@@ -13,14 +14,9 @@ dependencies = [
     "xarray>=2024.7.0",
 ]
 
-[project.scripts]
-hello = "pywbm:hello"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.uv]
-dev-dependencies = [
-    "ipykernel>=6.29.5",
-]
+dev-dependencies = []
