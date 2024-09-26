@@ -9,4 +9,4 @@ Clone this directory, then run `pip install .` (using a virtual environment is r
 
 ## Notes
 
-You may need to install (Git Large File Storage)[https://git-lfs.com/] to download the necessary data files for all the notebook examples. 
+You may need to install [Git Large File Storage](https://git-lfs.com/) to download the necessary data files for all the notebook examples. 
