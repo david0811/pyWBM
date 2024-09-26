@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    "cftime>=1.6.4",
     "jax>=0.4.30",
     "jupyterlab>=4.2.5",
     "matplotlib>=3.9.2",
