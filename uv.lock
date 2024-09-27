@@ -1346,6 +1346,39 @@ wheels = [
 ]
 
 [[package]]
+name = "netcdf4"
+version = "1.7.1.post2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "cftime" },
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/51/9a/69022e4985b1994e463b5aefa4416c1061a1212fbcada84da35631c37813/netcdf4-1.7.1.post2.tar.gz", hash = "sha256:37d557e36654889d7020192bfb56f9d5f93894cb32997eb837ae586c538fd7b6", size = 827773 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fa/e5/1e69ba5af26585b487f13d1e7e3352b2fa305d992a958fc367da8720a764/netCDF4-1.7.1.post2-cp310-cp310-macosx_12_0_x86_64.whl", hash = "sha256:a1006ae117a754e3cf41a9e704032bf3837cbf53a695cd71deaad3e02e93d570", size = 2959357 },
+    { url = "https://files.pythonhosted.org/packages/33/85/a21d5dbbd23cf6c89540c663d92b2300b8b48f8bc0af74ecad24b8d1aeb3/netCDF4-1.7.1.post2-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:7530d60cf6450d997ea0607f8b68b9b088f2382c42648cddf5e66e6f1280b692", size = 2438927 },
+    { url = "https://files.pythonhosted.org/packages/91/db/1fa79420151ff8d2e7d30a168c037da1bbfe84b0f23ec8501fdeee916779/netCDF4-1.7.1.post2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:756a54cb212c9fc5d0ea74f7c661621821138ab8f63e818317330330cfd6165c", size = 9156670 },
+    { url = "https://files.pythonhosted.org/packages/db/19/59c04dea5bd8c1e62fb667f331651f465631c64b04083b134812364bb549/netCDF4-1.7.1.post2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:156428fc63e2280e8bcab7f49531cde19fbba192c2ffdfb352c6a3f5e813a80b", size = 9000584 },
+    { url = "https://files.pythonhosted.org/packages/23/64/378f7a586fd47cb8578926960ab4776ae2ca6f6eb2eaa41b64b7c8a780e0/netCDF4-1.7.1.post2-cp310-cp310-win_amd64.whl", hash = "sha256:79d890ade8b8646bb2833c2b9565392cdf5e97e016cf0319693d13bd8c2dd511", size = 6976795 },
+    { url = "https://files.pythonhosted.org/packages/e5/84/e841b5dd67b3442c61519797aad7dbfedbc41fdbe8520dc2d315e3d559cc/netCDF4-1.7.1.post2-cp311-cp311-macosx_12_0_x86_64.whl", hash = "sha256:b2700bd0a188637b740aa6ad09dbf9d21337fb1e0336f9859c2c6e9525404cc0", size = 2961133 },
+    { url = "https://files.pythonhosted.org/packages/c4/d7/9d003a3c0d6122a45807dbf1ac4fc7771ddfb9094fd363da2f7ea857ac76/netCDF4-1.7.1.post2-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:914e210f76c4ce016aed32ba7dfad57e6316a38502bdcbd071fc74ee8fec73ec", size = 2440271 },
+    { url = "https://files.pythonhosted.org/packages/10/5c/b2fa60348addf38c3bfe12a615fe7bb4f059fdb81de8016cf7b627f091cc/netCDF4-1.7.1.post2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a98731d88889e41e9a92d67cad8ac9d9c4acba612a999db803bd082384462dea", size = 9406765 },
+    { url = "https://files.pythonhosted.org/packages/80/1b/13781e16d1ad9be5a05455599ade51a6a657c91afd357798fc75310be185/netCDF4-1.7.1.post2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6369ed38ffd094fce44e066d0823b6420205d5825a715fe048146052b299754c", size = 9238697 },
+    { url = "https://files.pythonhosted.org/packages/fe/6b/ffb8bdbb492037d7cdec50d2f2216dd45fc0d4bec7c3263673bacbe95419/netCDF4-1.7.1.post2-cp311-cp311-win_amd64.whl", hash = "sha256:9fe939ad543371b5ea46864ba6ac88532b2189ce139804b3187c241eb89a02a6", size = 6981710 },
+    { url = "https://files.pythonhosted.org/packages/7f/c0/76d5ae14cb9c279e5129573b1b73bc5612c400495604371563e06eca0d1e/netCDF4-1.7.1.post2-cp312-cp312-macosx_12_0_x86_64.whl", hash = "sha256:658f38ceb74bb127e293a47fa36f949babba0c872cf3091e2fdafa73caacc7e4", size = 2934644 },
+    { url = "https://files.pythonhosted.org/packages/da/34/091dc272e473d67bd86c557d72257371fa06672046a101fa6407204873ce/netCDF4-1.7.1.post2-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:5f396f150f97831229e47f449fe6acbca8ff9d08b2166560c46790aa6f11b56b", size = 2437794 },
+    { url = "https://files.pythonhosted.org/packages/c1/ef/8c771348591c1973d4f4b0485df181540b73ea78e90b20856dec3a6cacf8/netCDF4-1.7.1.post2-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0d5216369a0a4a868dadb5c4137d854810a309b9f9ef1d16786269fbeb244101", size = 9325624 },
+    { url = "https://files.pythonhosted.org/packages/ad/b5/1cb245f31778b2df2aff47a393382b488c2daeb033fbbaa16af33d23780f/netCDF4-1.7.1.post2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:12f8ab560320e879763b7837d6f8f5eb285195271f47fc5c18362e5b097ee67c", size = 9204902 },
+    { url = "https://files.pythonhosted.org/packages/75/eb/2eed8334a56b31a6a811a168c8a8365b8edbb3e8cec16d19a74d26894e2e/netCDF4-1.7.1.post2-cp312-cp312-win_amd64.whl", hash = "sha256:2cbca7dcd92075aebe7c242e16f51f20bc5073b6f0f1449394dadc3c17e44b29", size = 6962853 },
+    { url = "https://files.pythonhosted.org/packages/ba/79/f845c1711144295f14fab09e3a98804f0e4a746484b2411231675885da7c/netCDF4-1.7.1.post2-cp39-cp39-macosx_12_0_x86_64.whl", hash = "sha256:d92bd60dc2b4beba293d81912f3094b2854e9f492ce5e9b4a3ad4fbd725a29e8", size = 2959488 },
+    { url = "https://files.pythonhosted.org/packages/cb/d4/312801a846373d91d4b42e04dfc87f083bbdf1e34914caad492f9ded63c5/netCDF4-1.7.1.post2-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:d8c015cd8c8582b351d715aed4c17da2e68493edaa59e91f6cf12756479fbd53", size = 2439481 },
+    { url = "https://files.pythonhosted.org/packages/90/12/9cc90b00d40bb4bbc62cb27800c3786d08795433098e55a2121f0c639f21/netCDF4-1.7.1.post2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6bc8ca705e39ac9f4d3950c908867d377f789e5bcc6f94e0a2bdadc4c4612f94", size = 9151264 },
+    { url = "https://files.pythonhosted.org/packages/ab/26/98e91ff4751824015f9ea7674bf7681537f1269b715bf794338b383de14f/netCDF4-1.7.1.post2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:98fef5b27a2325a50ec59793c96e5b1e9945061a390c1ea33d403ed91b7a2fb4", size = 9002804 },
+    { url = "https://files.pythonhosted.org/packages/f1/94/09775c319b608c002b060046c5fed06fd6b513c79009eb8b5479b674a646/netCDF4-1.7.1.post2-cp39-cp39-win_amd64.whl", hash = "sha256:294b24234fb71ee30640a451ed1428da3569f23383d35f905558093795f3609a", size = 6977924 },
+]
+
+[[package]]
 name = "notebook-shim"
 version = "0.2.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1737,6 +1770,7 @@ dependencies = [
     { name = "jupyterlab" },
     { name = "matplotlib" },
     { name = "nc-time-axis" },
+    { name = "netcdf4" },
     { name = "numpy" },
     { name = "optax" },
     { name = "pandas" },
@@ -1750,6 +1784,7 @@ requires-dist = [
     { name = "jupyterlab", specifier = ">=4.2.5" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "nc-time-axis", specifier = ">=1.4.1" },
+    { name = "netcdf4", specifier = ">=1.7.1.post2" },
     { name = "numpy", specifier = ">=2.0.2" },
     { name = "optax", specifier = ">=0.2.3" },
     { name = "pandas", specifier = ">=2.2.2" },
