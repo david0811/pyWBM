@@ -1,5 +1,6 @@
 # Large data files
 data/gmfd/
+data/VIC_validation.nc
 *.npz
 
 # macOS specific files
